@@ -7,7 +7,15 @@ import logo from "../assets/logo.png";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
-  const { user, setUser, setShowUserLogin, navigate, searchQuery, setSearchQuery } = useAppContext();
+  const {
+    user,
+    setUser,
+    setShowUserLogin,
+    navigate,
+    searchQuery,
+    setSearchQuery,
+    getCartCount,
+  } = useAppContext();
 
   const logout = async () => {
     setUser(null);
@@ -15,14 +23,18 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if( searchQuery.length > 0) {
-      navigate("/products")
+    if (searchQuery.length > 0) {
+      navigate("/products");
     }
-  }, [searchQuery])
-  
+  }, [searchQuery]);
+
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-2 border-b border-gray-300 bg-white relative transition-all">
-      <NavLink to="/" onClick={() => setOpen(false)} className="flex items-center">
+      <NavLink
+        to="/"
+        onClick={() => setOpen(false)}
+        className="flex items-center"
+      >
         <img src={logo} alt="logo" className="w-12" />
       </NavLink>
 
@@ -34,7 +46,7 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
           <input
-          onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500"
             type="text"
             placeholder="Search products"
@@ -42,14 +54,17 @@ const Navbar = () => {
           <img src={assets.search_icon} alt="search" className="size-4" />
         </div>
 
-        <div onClick={() => navigate("/cart")} className="relative cursor-pointer">
+        <div
+          onClick={() => navigate("/cart")}
+          className="relative cursor-pointer"
+        >
           <img
             src={assets.nav_cart_icon}
             alt="cart"
             className="size-6 opacity-80"
           />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
-            3
+            {getCartCount()}
           </button>
         </div>
         {!user ? (
@@ -79,15 +94,30 @@ const Navbar = () => {
           </div>
         )}
       </div>
-
-      <button
+<div className="flex items-center gap-6 sm:hidden">
+<div
+          onClick={() => navigate("/cart")}
+          className="relative cursor-pointer"
+        >
+          <img
+            src={assets.nav_cart_icon}
+            alt="cart"
+            className="size-6 opacity-80"
+          />
+          <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
+            {getCartCount()}
+          </button>
+        </div>
+  <button
         onClick={() => (open ? setOpen(false) : setOpen(true))}
         aria-label="Menu"
-        className="sm:hidden"
+        className=""
       >
-        {/* Menu Icon SVG */}
+        {/* Menu Icon */}
         <img src={assets.menu_icon} alt="menu" />
       </button>
+</div>
+      
 
       {/* Mobile Menu */}
       {open && (

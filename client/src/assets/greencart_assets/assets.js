@@ -475,7 +475,7 @@ export const dummyProducts = [
     category: "Drinks",
     price: 78,
     offerPrice: 73,
-    image: [pepsi_image],
+    image: [pepsi_image, coca_cola_image],
     description: [
       "Chilled and refreshing",
       "Perfect for celebrations",
