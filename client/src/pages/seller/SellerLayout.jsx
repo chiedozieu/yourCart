@@ -29,8 +29,8 @@ const SellerLayout = () => {
                     <button onClick={logout} className='border rounded-full text-sm px-4 py-1 cursor-pointer hover:bg-primary hover:text-white'>Logout</button>
                 </div>
             </div>
-            <div className="flex">
-                <div className="md:w-64 w-16 border-r h-[550px] text-base border-gray-300 pt-4 flex flex-col transition-all duration-300">
+            <div className="flex h-screen">
+                <div className="md:w-64 w-16 border-r h-screen text-base border-gray-300 pt-4 flex flex-col">
                     {sidebarLinks.map((item) => (
                         <NavLink to={item.path} key={item.name} end={item.path === "/seller"}
                             className={({isActive})=>`flex items-center py-3 px-4 gap-3
