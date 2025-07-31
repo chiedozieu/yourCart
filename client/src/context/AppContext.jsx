@@ -2,6 +2,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dummyProducts } from "../assets/greencart_assets/assets";
 import toast from "react-hot-toast";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 export const AppContext = createContext();
 
@@ -15,6 +19,21 @@ export const AppContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState({});
+
+  // fetch seller status
+  const fetchSellerStatus = async () => {
+    try {
+      const { data } = await axios.get("/api/seller/is-auth");
+      if (data.success) {
+        setIsSeller(true);
+      } else {
+        setIsSeller(false);
+      }
+    } catch (error) {
+      setIsSeller(false);
+    }
+  };
+
   //fetch all products
   const fetchProducts = async () => {
     setProducts(dummyProducts);
@@ -30,7 +49,6 @@ export const AppContextProvider = ({ children }) => {
       toast.success("Added to cart");
     }
     setCartItems(cartData);
-    
   };
 
   // update cart item quantity
@@ -49,9 +67,9 @@ export const AppContextProvider = ({ children }) => {
     if (cartData[itemId]) {
       cartData[itemId] -= 1;
       if (cartData[itemId] === 0) {
-          delete cartData[itemId];
-          toast.success("Removed from cart");
-        }
+        delete cartData[itemId];
+        toast.success("Removed from cart");
+      }
     }
     setCartItems(cartData);
   };
@@ -72,15 +90,15 @@ export const AppContextProvider = ({ children }) => {
     let totalAmount = 0;
     for (let item in cartItems) {
       let itemInfo = products.find((product) => product._id === item);
-      if(cartItems[item] > 0) {
-
+      if (cartItems[item] > 0) {
         totalAmount += itemInfo.offerPrice * cartItems[item];
       }
-    } 
+    }
     return Math.floor(totalAmount * 100) / 100;
   };
 
   useEffect(() => {
+    fetchSellerStatus();
     fetchProducts();
   }, []);
 
@@ -101,7 +119,8 @@ export const AppContextProvider = ({ children }) => {
     searchQuery,
     setSearchQuery,
     getCartCount,
-    getCartAmount
+    getCartAmount,
+    axios,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

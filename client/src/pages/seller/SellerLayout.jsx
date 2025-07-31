@@ -3,9 +3,10 @@ import { useAppContext } from '../../context/AppContext';
 import { assets } from '../../assets/greencart_assets/assets';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import logo from "../../assets/logo.png";
+import toast from 'react-hot-toast';
 
 const SellerLayout = () => {
-    const {  setIsSeller } = useAppContext();
+    const { axios, navigate } = useAppContext();
 
    
 
@@ -15,7 +16,17 @@ const SellerLayout = () => {
         { name: "Orders", path: "/seller/orders", icon: assets.order_icon },
     ];
     const logout = async () => {
-        setIsSeller(false);
+        try {
+            const { data } = await axios.post("/api/seller/logout");
+            if (data.success) {
+                toast.success(data.message);
+                navigate("/");
+            }else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
     };
 
     return (
