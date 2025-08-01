@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import {  useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { assets } from "../assets/greencart_assets/assets";
 import { useAppContext } from "../context/AppContext";
 import logo from "../assets/logo.png";
@@ -15,11 +15,23 @@ const Navbar = () => {
     searchQuery,
     setSearchQuery,
     getCartCount,
+    axios,
+    toast
   } = useAppContext();
 
   const logout = async () => {
-    setUser(null);
-    navigate("/");
+    try {
+      const { data } = await axios.post("/api/user/logout");
+      if (data.success) {
+        toast.success(data.message);
+        setUser(null);
+        navigate("/");
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   };
 
   useEffect(() => {
@@ -124,7 +136,7 @@ const Navbar = () => {
         <div
           className={`${
             open ? "flex" : "hidden"
-          } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
+          } absolute top-[60px] left-0 w-full z-50 bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
         >
           <NavLink to="/" onClick={() => setOpen(false)}>
             Home

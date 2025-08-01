@@ -33,7 +33,7 @@ const SellerLayout = () => {
         <>
             <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-2 bg-white">
                 <Link to="/">
-                    <img className="w-24 h-14 md:w-28 cursor-pointer" src={logo} alt="logo" />
+                    <img className="w-24 h-14 md:w-28 cursor-pointer object-contain" src={logo} alt="logo" />
                 </Link>
                 <div className="flex items-center gap-5 text-gray-500">
                     <p>Hi! Admin</p>
